@@ -1,0 +1,12 @@
+# NO SPACES ALLOWED
+# Number of clusters: integer or auto
+Nc=auto
+# Number of probes: 5 or 9 or odd number or auto
+num_probes=auto # auto detect
+# Mode: PLN or SFS or TWOSTAGEFS
+  mode = PLN    # clean
+# fs_method: SFS or PLOFS
+fs_method=PLOFS
+# Allow PLN with only a single cluster
+g_singleton_disallowed=FALSE
+
