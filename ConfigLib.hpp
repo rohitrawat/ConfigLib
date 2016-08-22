@@ -69,6 +69,9 @@ public:
     }
     
     string get(string key) {
+        if(store.find(key) == store.end()) {
+            return "";
+        }
         return store[key];
     }
     
