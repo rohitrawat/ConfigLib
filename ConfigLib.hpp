@@ -26,6 +26,11 @@
 #include <cctype>
 #include <locale>
 
+#include <sstream>
+#include <vector>
+
+#define MAX_LINE_SIZE 1024
+
 // trim from start
 static inline std::string &ltrim(std::string &s) {
     s.erase(s.begin(), std::find_if(s.begin(), s.end(),
@@ -66,6 +71,7 @@ public:
             }
             file.close();
         }
+        verbose = false;
     }
     
     string get(string key) {
@@ -75,6 +81,14 @@ public:
         return store[key];
     }
     
+    string get_or_quit(string key) {
+        if(store.find(key) == store.end()) {
+            cout<<"Parameter "<<key<<" is missing from "<<fname<<"."<<endl;
+            exit(-1);
+        }
+        return store[key];
+    }
+
     void put(string key, string value) {
         store[key] = value;
     }
@@ -100,11 +114,44 @@ public:
         }
         file.close();
     }
+    static string qz(string str, string message = "") {
+        if(str.size()==0) {
+            if(message.size()==0) {
+                cout<<"Parameter "<<str<<" is missing."<<endl;
+            } else {
+                cout<<message<<endl;
+            }
+            exit(-1);
+        }
+        return str;
+    }
+    
+    static string num2str(int num) {
+        stringstream ss;
+        ss<<num;
+        return ss.str();
+    }
+    
+    static int string2int(string str) {
+        int num;
+        num = atoi(str.c_str());
+        return num;
+    }
+    
+    static vector<int> string2int(const vector<string>& str) {
+        vector<int> num;
+        for(int i=0; i<str.size(); i++) {
+            num.push_back(atoi(str[i].c_str()));
+        }
+        return num;
+    }
+
 private:
     fstream file;
     string fname;
     bool exists;
-    char buf[1024];
+    char buf[MAX_LINE_SIZE];
+    bool verbose;
     
     map<string,string> store;
     
@@ -142,7 +189,9 @@ private:
         if(key.length()==0) {
             return;
         }
-        cout<<key<<" : "<<value<<endl;
+        if(verbose) {
+            cout<<key<<" : "<<value<<endl;
+        }
         store[key] = value;
     }
 };
