@@ -34,13 +34,13 @@ using namespace std;
 int main() {
     
     // Read an existing settings file
-    ConfigLib conf("settings_final.txt");
+    ConfigLib conf("settings.txt");
     cout<<conf.get("Nc")<<endl;
     cout<<conf.get("num_probes")<<endl;
     int Nc = ConfigLib::string2int(conf.get("Nc"));
     
     // Write a config
-    ConfigLib conf2("settings.txt");
+    ConfigLib conf2("settings_final.txt");
     conf2.put("car", "maruti");
     conf2.put("house", "clean");
     conf2.write();
