@@ -26,7 +26,7 @@ CATCH:
 
 The libray is used simply by:
 
-<pre>
+```cpp
 #include "ConfigLib.hpp"
 
 using namespace std;
@@ -34,7 +34,7 @@ using namespace std;
 int main() {
     
     // Read an existing settings file
-    ConfigLib conf("settings.txt");
+    ConfigLib conf("settings_final.txt");
     cout<<conf.get("Nc")<<endl;
     cout<<conf.get("num_probes")<<endl;
     int Nc = ConfigLib::string2int(conf.get("Nc"));
@@ -48,5 +48,5 @@ int main() {
 
     return 0;
 }
-</pre>
+```
 
