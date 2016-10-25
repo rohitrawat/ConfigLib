@@ -26,6 +26,8 @@
 #include <cctype>
 #include <locale>
 
+#include <limits.h>
+
 #include <sstream>
 #include <vector>
 
@@ -55,6 +57,8 @@ using namespace std;
 class ConfigLib {
 public:
     ConfigLib(const string &filename) {
+        verbose = true;
+        multiline_comment = false;
         fname = filename;
         file.open(fname.c_str(), ios::in);
         if(!file) {
@@ -71,12 +75,18 @@ public:
             }
             file.close();
         }
-        verbose = false;
     }
     
     string get(string key) {
         if(store.find(key) == store.end()) {
             return "";
+        }
+        return store[key];
+    }
+    
+    string get(string key, string default_value) {
+        if(store.find(key) == store.end()) {
+            return default_value;
         }
         return store[key];
     }
@@ -133,6 +143,9 @@ public:
     }
     
     static int string2int(string str) {
+        if(str.length()==0) {
+            return INT_MAX;
+        }
         int num;
         num = atoi(str.c_str());
         return num;
@@ -153,6 +166,8 @@ private:
     char buf[MAX_LINE_SIZE];
     bool verbose;
     
+    bool multiline_comment;
+    
     map<string,string> store;
     
     void parse() {
@@ -168,6 +183,19 @@ private:
             }
         }
         if(buf[start]=='#') {
+            return;
+        }
+        if(buf[start]=='/' && buf[start+1]=='*') {  //  TODO: check overflow
+            multiline_comment = true;
+            cout<<"Comment begins..\n";
+            return;
+        }
+        if(buf[start]=='*' && buf[start+1]=='/') {  //  TODO: check overflow
+            multiline_comment = false;
+            cout<<"Comment ends..\n";
+            return;
+        }
+        if(multiline_comment) {
             return;
         }
         for(int i=start; i<sizeof(buf) && buf[i]!='\0'; i++) {

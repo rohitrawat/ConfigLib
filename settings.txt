@@ -9,4 +9,11 @@ num_probes=auto # auto detect
 fs_method=PLOFS
 # Allow PLN with only a single cluster
 g_singleton_disallowed=FALSE
+/* A multi-
+line
+comment using C style
+CATCH: 
+1. / * and * / must be at the beginning of the line. 
+2. No nesting allowed.
+*/
 
